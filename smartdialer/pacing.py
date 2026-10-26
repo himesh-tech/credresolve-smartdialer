@@ -1,6 +1,4 @@
 from dataclasses import dataclass
-
-@dataclass
 class PacingDecision:
     requested_calls: int
     rationale: str
