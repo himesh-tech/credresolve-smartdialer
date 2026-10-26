@@ -11,7 +11,6 @@ class ProgressiveDialer:
         return PacingDecision(n, "One agent-bound call per available agent.")
 
 class PredictivePacingEngine:
-    # Explainable heuristic only; it has no provider access and cannot initiate calls.
     def propose(self, available_agents, eligible_borrowers, answer_rate, provider_healthy=True,
                 ringing_calls=0, connected_calls=0, max_overdial_factor=1.25):
         if available_agents <= 0 or eligible_borrowers <= 0:
@@ -26,7 +25,6 @@ class PredictivePacingEngine:
         return PacingDecision(count, f"Free capacity={spare}; answer-rate estimate={rate:.0%}; raw={desired}; overdial cap={cap}.")
 
 class SafetyController:
-    # Independent hard limit: predictive requests cannot bypass available-agent capacity.
     def approve(self, requested_calls, available_agents, eligible_borrowers, provider_healthy, campaign_remaining):
         if not provider_healthy:
             n = min(available_agents, eligible_borrowers, campaign_remaining)
