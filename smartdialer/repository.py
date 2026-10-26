@@ -3,7 +3,6 @@ import time
 from .models import Agent, AgentState, Borrower, Call, CallState, TERMINAL_CALL_STATES
 
 class InMemoryRepository:
-    # Process-local atomic store. Production must use DB transactions/conditional updates.
     def __init__(self):
         self._lock = RLock()
         self.agents = {}
@@ -29,7 +28,6 @@ class InMemoryRepository:
         with self._lock: return sum(b.eligible for b in self.borrowers.values())
 
     def reserve_pair(self, campaign_id, lease_seconds=30):
-        # The lock makes agent + borrower reservation atomic within this process.
         with self._lock:
             limit = self.campaign_limits.get(campaign_id, 10**9)
             initiated = self.initiated_by_campaign.get(campaign_id, 0)
@@ -61,7 +59,6 @@ class InMemoryRepository:
             self.agents[call.agent_id].state = AgentState.DIALING
 
     def apply_event(self, event):
-        # Event IDs are idempotent; sequence and terminal checks prevent regressions.
         with self._lock:
             if event.event_id in self.processed_event_ids: return "duplicate"
             self.processed_event_ids.add(event.event_id)
