@@ -2,8 +2,7 @@ from dataclasses import dataclass
 from .models import CallState, ProviderEvent
 
 class ProviderError(RuntimeError): pass
-
-@dataclass
+    
 class ProviderResult:
     provider_call_id: str
     events: list
