@@ -14,21 +14,18 @@ class CallState(str, Enum):
 
 TERMINAL_CALL_STATES = {CallState.COMPLETED, CallState.FAILED, CallState.CANCELLED}
 
-@dataclass
 class Agent:
     agent_id: str
     state: AgentState = AgentState.AVAILABLE
     current_call_id: Optional[str] = None
     reservation_expires_at: Optional[float] = None
 
-@dataclass
 class Borrower:
     borrower_id: str
     priority: int = 0
     attempts: int = 0
     eligible: bool = True
 
-@dataclass
 class Call:
     call_id: str
     borrower_id: str
@@ -38,8 +35,7 @@ class Call:
     provider_call_id: Optional[str] = None
     created_at: float = field(default_factory=time.time)
     last_event_sequence: int = -1
-
-@dataclass(frozen=True)
+    
 class ProviderEvent:
     event_id: str
     call_id: str
